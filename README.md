@@ -1,1 +1,115 @@
-# Compliance-Quality-Assurance-Tests
+# Compliance, Quality Assurance & Tests — 🐾 PetGuardian
+> **Sprint 4 — Consolidação Final de Testes de Software & Qualidade**  
+> Desafio 2026 (2º Ano ADS — Clyvo Vet) | Turmas de Fevereiro (2TDSPG)
+
+---
+
+## 👥 Integrantes do Grupo
+
+| Nome Completo | RM | Turma | GitHub | LinkedIn |
+| :--- | :---: | :---: | :--- | :--- |
+| **Enzo Okuizumi** | **561432** | 2TDSPG | [EnzoOkuizumiFiap](https://github.com/EnzoOkuizumiFiap) | [Enzo Okuizumi](https://www.linkedin.com/in/enzo-okuizumi-b60292256/) |
+| **Gustavo Okada** | **563428** | 2TDSPG | [Gdev3356](https://github.com/Gdev3356) | [Gustavo Okada](https://www.linkedin.com/in/gustavo-okada-53a3b8359/) |
+| **Lucas Barros Gouveia** | **566422** | 2TDSPG | [LuzBGouveia](https://github.com/LuzBGouveia) | [Lucas Barros Gouveia](https://www.linkedin.com/in/lucas-barros-gouveia-09b147355/) |
+| **Luna de Carvalho Guimarães** | **562290** | 2TDSPG | [lunaguima](https://github.com/lunaguima) | [Luna M. Guimarães](https://www.linkedin.com/in/luna-m-guimar%C3%A3es-1850ab173/) |
+| **Milton Marcelino** | **564836** | 2TDSPG | [MiltonMarcelino](https://github.com/MiltonMarcelino) | [Milton Marcelino](http://linkedin.com/in/milton-marcelino-250298142) |
+
+---
+
+## 🔗 Links Oficiais Obrigatórios de Entrega (Sprint 4)
+
+1. **Link de Acesso ao Azure Boards (Testes Manuais):**  
+   👉 [https://dev.azure.com/PetGuardian/Pet-Guardian-Sprint-3](https://dev.azure.com/PetGuardian/Pet-Guardian-Sprint-3)  
+   *(O professor possui perfil **Basic** na Organização e acesso **Administrator** no projeto).*
+
+2. **Link do Vídeo Demonstrativo dos Testes de Automação (Postman):**  
+   👉 [Vídeo Demonstrativo de Automação de Testes — YouTube (Não Listado)](https://youtube.com)  
+   *(Demonstração completa da configuração, execução em lote e resultados de todos os testes).*
+
+3. **Repositório GitHub Oficial (Branch Obrigatória: `develop`):**  
+   👉 [https://github.com/Challenge-Pet-Guardian-4/Compliance-Quality-Assurance-Tests/tree/develop](https://github.com/Challenge-Pet-Guardian-4/Compliance-Quality-Assurance-Tests/tree/develop)
+
+---
+
+## 📑 Estrutura da Entrega de Qualidade
+
+A entrega de QA atende integralmente à divisão percentual e critérios do edital:
+
+```
+Compliance-Quality-Assurance-Tests/
+│
+├── docs/
+│   └── PLANO_DE_TESTES_AZURE_BOARDS.md     # Detalhamento dos 5 Test Cases com Dados Controlados
+│
+├── postman/
+│   ├── PetGuardian_QA_Automation.postman_collection.json # Suíte com 4 Casos Automatizados
+│   └── PetGuardian_QA_Environment.postman_environment.json # Variáveis de Ambiente (Local & Nuvem)
+│
+└── README.md                               # Documentação Oficial com Links e Instruções
+```
+
+---
+
+## 📋 PARTE A) Teste Manual de Software no Azure Boards (80%)
+
+O plano de testes manuais foi modelado diretamente no **Azure Boards / Test Plans**, utilizando a técnica de **dados controlados** predefinidos para garantir repetibilidade e confiabilidade.
+
+| ID | Caso de Teste | Objetivo Principal | Dados de Entrada Controlados | Resultado Esperado | Peso |
+| :---: | :--- | :--- | :--- | :--- | :---: |
+| **TC-01** | Autenticação de Cuidador | Validar segurança e emissão do JWT | `email`: `"admin@petguardian.com"`<br>`senha`: `"admin123"` | HTTP 200, JWT estruturado, redirecionamento | 20% |
+| **TC-02** | Cadastro de Pet no Care Circle | Validar persistência relacional na tabela `PET` | `nome`: `"Thor Okuizumi"`<br>`porte`: `"GRANDE"`, `castrado`: `1` | HTTP 201 Created, ID gerado, vínculo `USUARIO_PET` | 20% |
+| **TC-03** | Ciclo de Tarefa e Gamificação | Validar transição `PENDENTE` -> `CONCLUIDO` | `titulo`: `"Vacinação V10"`<br>`pontos`: `50` | HTTP 200, +50 pontos atribuídos, auditoria DML | 20% |
+| **TC-04** | Stored Procedure Oracle | Validar cálculo via `PKG_PETGUARDIAN` | Chamada ao endpoint `/pets/me/pontos` | HTTP 200, agregação de pontos calculada por procedure | 20% |
+| **TC-05** | Consulta NoSQL MongoDB | Validar documentos de trilhas pedagógicas | Categoria `"ADESTRAMENTO_POSITIVO"` | HTTP 200, documento NoSQL com mídia e metadados | - |
+
+> 📌 *O passo a passo minucioso de cada caso de teste está documentado em [`docs/PLANO_DE_TESTES_AZURE_BOARDS.md`](./docs/PLANO_DE_TESTES_AZURE_BOARDS.md).*
+
+---
+
+## 🤖 PARTE B) Automação de Testes de Integração com Postman (20%)
+
+Para a automação dos testes de integração, foi desenvolvida uma coleção Postman com **4 casos de testes automatizados**, contendo scripts em JavaScript no padrão `pm.test` com validação de status code, JSON Schema, tempo de resposta e integridade de variáveis dinâmicas.
+
+### 🧪 Casos de Testes Automatizados Implementados:
+
+1. **Teste 01: Autenticação com Credenciais Válidas (Login JWT)**
+   - **Verificações:** Status `200 OK`, presença de token string não vazio, validação do e-mail do usuário e extração dinâmica do `jwt_token` para o ambiente do Postman.
+2. **Teste 02: Persistência de Pet no Banco Relacional (201 Created)**
+   - **Verificações:** Status `201 Created`, validação de campos obrigatórios (`id`, `nome`, `porte`, `sexo`), cabeçalho `application/json` e gravação do `created_pet_id`.
+3. **Teste 03: Invocação de Stored Procedure Oracle (`/pets/me/pontos`)**
+   - **Verificações:** Status `200 OK`, validação da estrutura retornada pela execução da Stored Procedure (`pontuacaoTotalGeral`, `totalPetsAvaliados`, array de detalhes).
+4. **Teste 04: Validação de Resiliência e Segurança (400 Bad Request)**
+   - **Verificações:** Envio de payload inválido sem autorização e campos obrigatórios, validando interceptação pelo `GlobalExceptionHandler` e status `400 Bad Request`.
+
+---
+
+## 🚀 Como Executar os Testes Automatizados
+
+### Opção 1: Via Postman Desktop
+1. Abra o Postman.
+2. Clique em **Import** e selecione os dois arquivos da pasta `postman/`:
+   - `PetGuardian_QA_Automation.postman_collection.json`
+   - `PetGuardian_QA_Environment.postman_environment.json`
+3. Selecione o ambiente **PetGuardian — Environment (Local & Cloud)**.
+4. Clique com o botão direito na coleção e selecione **Run Collection**.
+5. Clique em **Run PetGuardian — QA Automated Integration Tests**. Todos os 4 testes devem passar com 100% de sucesso.
+
+### Opção 2: Via Linha de Comando (Newman CLI)
+```bash
+# Instalar o Newman globalmente (se necessário)
+npm install -g newman
+
+# Executar a coleção com relatório no terminal
+newman run postman/PetGuardian_QA_Automation.postman_collection.json \
+  -e postman/PetGuardian_QA_Environment.postman_environment.json \
+  --reporters cli
+```
+
+---
+
+## 🔒 Configuração de Permissões para Avaliação (Azure DevOps)
+
+Para garantir acesso irrestrito do professor sem qualquer risco de penalidade:
+1. **Organization Settings > Users:** Professor adicionado com perfil **Basic**.
+2. **Project Settings > Permissions > Project Administrators:** Professor adicionado ao grupo de **Administradores**.
+3. **Branch de Entrega:** O repositório está configurado e publicado com a branch padrão de avaliação: **`develop`**.

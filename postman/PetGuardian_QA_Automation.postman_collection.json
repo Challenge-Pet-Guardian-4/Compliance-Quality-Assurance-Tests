@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "8f3b6d21-9a7c-4e89-b1d5-c54d3c45781a",
+		"name": "PetGuardian — QA Automated Integration Tests (Sprint 4)",
+		"description": "Suíte oficial de testes automatizados de integração da API PetGuardian para atendimento ao requisito de 20% da disciplina de Compliance, Quality Assurance & Tests (Sprint 4 - FIAP 2026).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Autenticação — Login com Credenciais Válidas (JWT)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter token JWT e dados do usuário\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('token');",
+							"    pm.expect(jsonData.token).to.be.a('string').and.not.empty;",
+							"    pm.expect(jsonData).to.have.property('user');",
+							"    pm.expect(jsonData.user).to.have.property('email');",
+							"    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"user_email\") || \"admin@petguardian.com\");",
+							"    ",
+							"    // Armazena dinamicamente o Bearer Token no ambiente para os próximos testes",
+							"    pm.environment.set(\"jwt_token\", jsonData.token);",
+							"});",
+							"",
+							"pm.test(\"Tempo de resposta deve ser inferior a 2000ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"{{user_email}}\",\n  \"senha\": \"{{user_password}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				},
+				"description": "Valida o fluxo de autenticação com dados controlados e armazena o token JWT para as requisições subsequentes."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Pets — Cadastro de Novo Pet no Care Circle (201 Created)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 201 Created\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Entidade Pet persistida com atributos corretos\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"    pm.expect(jsonData.nome).to.eql(\"Rex QA Automation\");",
+							"    pm.expect(jsonData.porte).to.eql(\"MEDIO\");",
+							"    pm.expect(jsonData.sexo).to.eql(\"M\");",
+							"    ",
+							"    // Salva o id do pet criado para asserções posteriores",
+							"    pm.environment.set(\"created_pet_id\", jsonData.id);",
+							"});",
+							"",
+							"pm.test(\"Headers de resposta devem incluir Content-Type application/json\", function () {",
+							"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nome\": \"Rex QA Automation\",\n  \"dataNasc\": \"2023-05-10\",\n  \"sexo\": \"M\",\n  \"porte\": \"MEDIO\",\n  \"castrado\": 1,\n  \"racaId\": 1\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pets",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pets"
+					]
+				},
+				"description": "Cria um novo pet associado ao usuário autenticado com dados controlados e valida a persistência relacional."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Procedimentos Oracle — Consulta de Pontuação via Stored Procedure (200 OK)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Resposta deve conter cálculo agregado retornado pela Stored Procedure Oracle\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('pontuacaoTotalGeral');",
+							"    pm.expect(jsonData.pontuacaoTotalGeral).to.be.a('number');",
+							"    pm.expect(jsonData).to.have.property('totalPetsAvaliados');",
+							"    pm.expect(jsonData.totalPetsAvaliados).to.be.a('number');",
+							"    pm.expect(jsonData).to.have.property('detalhesPorPet');",
+							"    pm.expect(jsonData.detalhesPorPet).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pets/me/pontos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pets",
+						"me",
+						"pontos"
+					]
+				},
+				"description": "Invoca o endpoint que executa diretamente a Stored Procedure Oracle de cálculo de pontuação de cuidados, validando a integração procedural."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Validação e Segurança — Rejeição de Requisição com Payload Inválido (400 Bad Request)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 400 Bad Request\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"",
+							"pm.test(\"Estrutura do GlobalExceptionHandler deve detalhar os erros de validação\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.be.an('array').or.to.have.property('errors').or.to.have.property('message');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nome\": \"\",\n  \"porte\": \"INVALID_PORTE\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pets",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pets"
+					]
+				},
+				"description": "Testa a robustez da aplicação ao enviar payload incompleto e inconsistente, garantindo a interceptação pelo Global Exception Handler."
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "user_email",
+			"value": "admin@petguardian.com",
+			"type": "string"
+		},
+		{
+			"key": "user_password",
+			"value": "admin123",
+			"type": "string"
+		}
+	]
+}
