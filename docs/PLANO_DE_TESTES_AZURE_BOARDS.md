@@ -1,7 +1,7 @@
 # 📋 Plano de Testes Manuais de Software — Azure Boards (80%)
 ## 🐾 Projeto: PetGuardian (Challenge 2026 — Clyvo Vet)
 > **Disciplina:** Compliance, Quality Assurance & Tests — 4ª Sprint  
-> **Plataforma de Gestão:** [Azure Boards](https://dev.azure.com/PetGuardian/Pet-Guardian-Sprint-3)
+> **Plataforma de Gestão:** [Azure Boards](https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps)
 
 ---
 
@@ -20,7 +20,7 @@
 ## 🎯 Configuração de Acesso do Professor
 * **Organização no Azure DevOps:** `PetGuardian`
 * **Nível de Acesso na Organização:** Perfil **Basic**
-* **Acesso no Projeto:** **Administrator** do Projeto `Pet-Guardian-Sprint-3`
+* **Acesso no Projeto:** **Administrator** do Projeto `Sprint 4 – Azure DevOps`
 
 ---
 
@@ -30,18 +30,18 @@
 * **Objetivo:** Validar a segurança e o controle de acesso de cuidadores cadastrados no sistema PetGuardian, garantindo a geração de Bearer Token JWT válido para autenticação de APIs e sincronização mobile.
 * **Pré-condições:** Usuário previamente cadastrado na base relacional Oracle (ou seed de inicialização).
 * **Dados de Entrada Controlados:**
-  - `email`: `"admin@petguardian.com"`
-  - `senha`: `"admin123"`
+  - `email`: `"enzo.admin@petguardian.com"`
+  - `senha`: `"123mudar"`
   - `metodo`: `POST /login`
 * **Procedimento de Teste (Passo a Passo):**
   1. Acessar a interface de autenticação do sistema (ou endpoint `/login` via cliente HTTP/Swagger).
-  2. Informar no campo de e-mail exatamente `"admin@petguardian.com"`.
-  3. Informar no campo de senha exatamente `"admin123"`.
+  2. Informar no campo de e-mail exatamente `"enzo.admin@petguardian.com"`.
+  3. Informar no campo de senha exatamente `"123mudar"`.
   4. Clicar no botão "Entrar" / Enviar requisição.
   5. Observar o tempo de resposta e o cabeçalho de autorização gerado.
 * **Dados de Saída Esperados:**
   - Código HTTP: `200 OK`.
-  - Corpo da Resposta: JSON contendo o campo `token` preenchido com string alfanumérica JWT estruturada (`header.payload.signature`) e objeto `user` com `email: "admin@petguardian.com"`, `role: "ADMIN"`.
+  - Corpo da Resposta: JSON contendo o campo `token` preenchido com string alfanumérica JWT estruturada (`header.payload.signature`) e objeto `user` com `email: "enzo.admin@petguardian.com"`, `role: "ADMIN"`.
   - Redirecionamento bem-sucedido para o Dashboard / Home do Tutor.
 
 ---
@@ -50,18 +50,18 @@
 * **Objetivo:** Validar a criação de um animal dependente vinculado ao tutor principal, garantindo integridade das regras de negócio (porte, sexo, raça e castração) e persistência relacional na tabela `PET`.
 * **Pré-condições:** Usuário autenticado com token JWT ativo.
 * **Dados de Entrada Controlados:**
-  - `nome`: `"Thor Okuizumi"`
-  - `dataNasc`: `"2022-08-15"`
+  - `nome`: `"Rex QA Automation"`
+  - `dataNasc`: `"2023-05-10"`
   - `sexo`: `"M"` (Macho)
-  - `porte`: `"GRANDE"`
-  - `castrado`: `1` (Sim)
-  - `racaId`: `1` (Golden Retriever)
+  - `porte`: `"MEDIO"`
+  - `castrado`: `true` (Sim)
+  - `raca`: `"Golden Retriever"`
 * **Procedimento de Teste (Passo a Passo):**
   1. No menu principal da aplicação (Mobile ou Web), acessar "Adicionar Novo Pet".
-  2. Preencher o campo Nome com `"Thor Okuizumi"`.
-  3. Selecionar no calendário a data de nascimento `"15/08/2022"`.
-  4. Selecionar o sexo `"Macho"`, porte `"Grande"` e marcar a opção "Castrado".
-  5. Selecionar a Raça com ID `1`.
+  2. Preencher o campo Nome com `"Rex QA Automation"`.
+  3. Selecionar no calendário a data de nascimento `"10/05/2023"`.
+  4. Selecionar o sexo `"Macho"`, porte `"Médio"` e marcar a opção "Castrado" como verdadeira (`true`).
+  5. Preencher a Raça com `"Golden Retriever"`.
   6. Acionar a ação de submissão do formulário.
 * **Dados de Saída Esperados:**
   - Código HTTP: `201 Created`.

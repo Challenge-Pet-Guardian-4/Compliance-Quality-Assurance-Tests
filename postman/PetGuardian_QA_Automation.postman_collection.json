@@ -23,7 +23,7 @@
 							"    pm.expect(jsonData.token).to.be.a('string').and.not.empty;",
 							"    pm.expect(jsonData).to.have.property('user');",
 							"    pm.expect(jsonData.user).to.have.property('email');",
-							"    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"user_email\") || \"admin@petguardian.com\");",
+							"    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"user_email\") || \"enzo.admin@petguardian.com\");",
 							"    ",
 							"    // Armazena dinamicamente o Bearer Token no ambiente para os próximos testes",
 							"    pm.environment.set(\"jwt_token\", jsonData.token);",
@@ -80,6 +80,7 @@
 							"    pm.expect(jsonData.nome).to.eql(\"Rex QA Automation\");",
 							"    pm.expect(jsonData.porte).to.eql(\"MEDIO\");",
 							"    pm.expect(jsonData.sexo).to.eql(\"M\");",
+							"    pm.expect(jsonData.castrado).to.eql(true);",
 							"    ",
 							"    // Salva o id do pet criado para asserções posteriores",
 							"    pm.environment.set(\"created_pet_id\", jsonData.id);",
@@ -113,7 +114,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"nome\": \"Rex QA Automation\",\n  \"dataNasc\": \"2023-05-10\",\n  \"sexo\": \"M\",\n  \"porte\": \"MEDIO\",\n  \"castrado\": 1,\n  \"racaId\": 1\n}"
+					"raw": "{\n  \"nome\": \"Rex QA Automation\",\n  \"dataNasc\": \"2023-05-10\",\n  \"raca\": \"Golden Retriever\",\n  \"porte\": \"MEDIO\",\n  \"sexo\": \"M\",\n  \"castrado\": true\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/pets",
@@ -141,12 +142,14 @@
 							"",
 							"pm.test(\"Resposta deve conter cálculo agregado retornado pela Stored Procedure Oracle\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.have.property('pontuacaoTotalGeral');",
-							"    pm.expect(jsonData.pontuacaoTotalGeral).to.be.a('number');",
-							"    pm.expect(jsonData).to.have.property('totalPetsAvaliados');",
-							"    pm.expect(jsonData.totalPetsAvaliados).to.be.a('number');",
-							"    pm.expect(jsonData).to.have.property('detalhesPorPet');",
-							"    pm.expect(jsonData.detalhesPorPet).to.be.an('array');",
+							"    pm.expect(jsonData).to.have.property('pontosTarefas');",
+							"    pm.expect(jsonData.pontosTarefas).to.be.a('number');",
+							"    pm.expect(jsonData).to.have.property('pontosAulas');",
+							"    pm.expect(jsonData.pontosAulas).to.be.a('number');",
+							"    pm.expect(jsonData).to.have.property('pontosTotais');",
+							"    pm.expect(jsonData.pontosTotais).to.be.a('number');",
+							"    pm.expect(jsonData).to.have.property('detalhePets');",
+							"    pm.expect(jsonData.detalhePets).to.be.an('array');",
 							"});"
 						],
 						"type": "text/javascript"
@@ -194,7 +197,10 @@
 							"",
 							"pm.test(\"Estrutura do GlobalExceptionHandler deve detalhar os erros de validação\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData).to.be.an('array').or.to.have.property('errors').or.to.have.property('message');",
+							"    pm.expect(jsonData).to.have.property('erros');",
+							"    pm.expect(jsonData.erros).to.be.an('array').and.not.empty;",
+							"    pm.expect(jsonData.erros[0]).to.have.property('campo');",
+							"    pm.expect(jsonData.erros[0]).to.have.property('mensagem');",
 							"});"
 						],
 						"type": "text/javascript"
@@ -240,17 +246,17 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "http://localhost:8080",
+			"value": "https://app-petguardian-01bd2f0c.azurewebsites.net",
 			"type": "string"
 		},
 		{
 			"key": "user_email",
-			"value": "admin@petguardian.com",
+			"value": "enzo.admin@petguardian.com",
 			"type": "string"
 		},
 		{
 			"key": "user_password",
-			"value": "admin123",
+			"value": "123mudar",
 			"type": "string"
 		}
 	]

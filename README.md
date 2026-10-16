@@ -19,11 +19,11 @@
 ## 🔗 Links Oficiais Obrigatórios de Entrega (Sprint 4)
 
 1. **Link de Acesso ao Azure Boards (Testes Manuais):**  
-   👉 [https://dev.azure.com/PetGuardian/Pet-Guardian-Sprint-3](https://dev.azure.com/PetGuardian/Pet-Guardian-Sprint-3)  
+   👉 [https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps](https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps)  
    *(O professor possui perfil **Basic** na Organização e acesso **Administrator** no projeto).*
 
 2. **Link do Vídeo Demonstrativo dos Testes de Automação (Postman):**  
-   👉 [Vídeo Demonstrativo de Automação de Testes — YouTube (Não Listado)](https://youtube.com)  
+   👉 *[Vídeo da Sprint 4 a ser anexado]*  
    *(Demonstração completa da configuração, execução em lote e resultados de todos os testes).*
 
 3. **Repositório GitHub Oficial (Branch Obrigatória: `develop`):**  
@@ -56,8 +56,8 @@ O plano de testes manuais foi modelado diretamente no **Azure Boards / Test Plan
 
 | ID | Caso de Teste | Objetivo Principal | Dados de Entrada Controlados | Resultado Esperado | Peso |
 | :---: | :--- | :--- | :--- | :--- | :---: |
-| **TC-01** | Autenticação de Cuidador | Validar segurança e emissão do JWT | `email`: `"admin@petguardian.com"`<br>`senha`: `"admin123"` | HTTP 200, JWT estruturado, redirecionamento | 20% |
-| **TC-02** | Cadastro de Pet no Care Circle | Validar persistência relacional na tabela `PET` | `nome`: `"Thor Okuizumi"`<br>`porte`: `"GRANDE"`, `castrado`: `1` | HTTP 201 Created, ID gerado, vínculo `USUARIO_PET` | 20% |
+| **TC-01** | Autenticação de Cuidador | Validar segurança e emissão do JWT | `email`: `"enzo.admin@petguardian.com"`<br>`senha`: `"123mudar"` | HTTP 200, JWT estruturado, redirecionamento | 20% |
+| **TC-02** | Cadastro de Pet no Care Circle | Validar persistência relacional na tabela `PET` | `nome`: `"Rex QA Automation"`<br>`porte`: `"MEDIO"`, `castrado`: `true`, `raca`: `"Golden Retriever"` | HTTP 201 Created, ID gerado, vínculo `USUARIO_PET` | 20% |
 | **TC-03** | Ciclo de Tarefa e Gamificação | Validar transição `PENDENTE` -> `CONCLUIDO` | `titulo`: `"Vacinação V10"`<br>`pontos`: `50` | HTTP 200, +50 pontos atribuídos, auditoria DML | 20% |
 | **TC-04** | Stored Procedure Oracle | Validar cálculo via `PKG_PETGUARDIAN` | Chamada ao endpoint `/pets/me/pontos` | HTTP 200, agregação de pontos calculada por procedure | 20% |
 | **TC-05** | Consulta NoSQL MongoDB | Validar documentos de trilhas pedagógicas | Categoria `"ADESTRAMENTO_POSITIVO"` | HTTP 200, documento NoSQL com mídia e metadados | - |
