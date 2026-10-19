@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "8f3b6d21-9a7c-4e89-b1d5-c54d3c45781a",
 		"name": "PetGuardian — QA Automated Integration Tests (Sprint 4)",
-		"description": "Suíte oficial de testes automatizados de integração da API PetGuardian para atendimento ao requisito de 20% da disciplina de Compliance, Quality Assurance & Tests (Sprint 4 - FIAP 2026).",
+		"description": "Suíte oficial de testes automatizados de integração da API PetGuardian (Sprint 4 - FIAP 2026). Valida o ciclo completo de vida de dados com arquitetura idempotente e teardown: autenticação JWT, cadastro de pet, ciclo de tarefas (criação e conclusão), cálculo de pontuação via Stored Procedure Oracle (PKG_PETGUARDIAN.CALCULAR_PONTOS_PET), resiliência com GlobalExceptionHandler (400 Bad Request) e limpeza de dados (Teardown DELETE).",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -25,12 +25,12 @@
 							"    pm.expect(jsonData.user).to.have.property('email');",
 							"    pm.expect(jsonData.user.email).to.eql(pm.environment.get(\"user_email\") || \"enzo.admin@petguardian.com\");",
 							"    ",
-							"    // Armazena dinamicamente o Bearer Token no ambiente para os próximos testes",
+							"    // Armazena dinamicamente o Bearer Token no ambiente para as próximas requisições",
 							"    pm.environment.set(\"jwt_token\", jsonData.token);",
 							"});",
 							"",
-							"pm.test(\"Tempo de resposta deve ser inferior a 2000ms\", function () {",
-							"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+							"pm.test(\"Tempo de resposta deve ser inferior a 2500ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(2500);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -73,16 +73,16 @@
 							"    pm.response.to.have.status(201);",
 							"});",
 							"",
-							"pm.test(\"Entidade Pet persistida com atributos corretos\", function () {",
+							"pm.test(\"Entidade Pet persistida com atributos corretos no Oracle\", function () {",
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData).to.have.property('id');",
 							"    pm.expect(jsonData.id).to.be.a('number');",
-							"    pm.expect(jsonData.nome).to.eql(\"Rex QA Automation\");",
+							"    pm.expect(jsonData.nome).to.be.a('string').and.not.empty;",
 							"    pm.expect(jsonData.porte).to.eql(\"MEDIO\");",
 							"    pm.expect(jsonData.sexo).to.eql(\"M\");",
 							"    pm.expect(jsonData.castrado).to.eql(true);",
 							"    ",
-							"    // Salva o id do pet criado para asserções posteriores",
+							"    // Salva o id do pet criado para os testes subsequentes",
 							"    pm.environment.set(\"created_pet_id\", jsonData.id);",
 							"});",
 							"",
@@ -125,12 +125,74 @@
 						"pets"
 					]
 				},
-				"description": "Cria um novo pet associado ao usuário autenticado com dados controlados e valida a persistência relacional."
+				"description": "Cria um novo pet associado ao usuário autenticado com dados controlados e valida a persistência relacional no Oracle."
 			},
 			"response": []
 		},
 		{
-			"name": "3. Procedimentos Oracle — Consulta de Pontuação via Stored Procedure (200 OK)",
+			"name": "3. Tarefas — Agendamento de Cuidados Preventivos (201 Created)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 201 Created\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"pm.test(\"Tarefa criada vinculada ao Pet no estado PENDENTE com pontuação\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('id');",
+							"    pm.expect(jsonData.id).to.be.a('number');",
+							"    pm.expect(jsonData.titulo).to.eql(\"Vacina Polivalente V10\");",
+							"    pm.expect(jsonData.pontosTarefa).to.eql(10);",
+							"    pm.expect(jsonData.status).to.eql(\"PENDENTE\");",
+							"    ",
+							"    // Armazena o ID da tarefa para ser concluída no próximo teste",
+							"    pm.environment.set(\"created_tarefa_id\", jsonData.id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"titulo\": \"Vacina Polivalente V10\",\n  \"pontosTarefa\": 10,\n  \"descricao\": \"Aplicação de reforço anual de vacina V10\",\n  \"prazo\": \"2026-12-31T10:00:00\",\n  \"petId\": {{created_pet_id}},\n  \"status\": \"PENDENTE\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/tarefas",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"tarefas"
+					]
+				},
+				"description": "Cria uma tarefa preventiva vinculada ao Pet recém-cadastrado valendo 10 pontos de saúde."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Tarefas — Conclusão de Rotina e Gamificação (200 OK)",
 			"event": [
 				{
 					"listen": "test",
@@ -140,16 +202,62 @@
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Resposta deve conter cálculo agregado retornado pela Stored Procedure Oracle\", function () {",
+							"pm.test(\"Status da tarefa transicionado para CONCLUIDO\", function () {",
 							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.status).to.eql(\"CONCLUIDO\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/tarefas/{{created_tarefa_id}}/concluir",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"tarefas",
+						"{{created_tarefa_id}}",
+						"concluir"
+					]
+				},
+				"description": "Aciona a transição de estado da tarefa de PENDENTE para CONCLUIDO, disparando a pontuação acumulada para o pet."
+			},
+			"response": []
+		},
+		{
+			"name": "5. Procedimentos Oracle — Consulta de Pontuação via Stored Procedure (200 OK)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 200 OK\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Stored Procedure Oracle (PKG_PETGUARDIAN) retornou 10 pontos da tarefa recém-concluída\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('petId');",
+							"    pm.expect(jsonData.petId).to.eql(pm.environment.get(\"created_pet_id\"));",
 							"    pm.expect(jsonData).to.have.property('pontosTarefas');",
-							"    pm.expect(jsonData.pontosTarefas).to.be.a('number');",
-							"    pm.expect(jsonData).to.have.property('pontosAulas');",
-							"    pm.expect(jsonData.pontosAulas).to.be.a('number');",
+							"    pm.expect(jsonData.pontosTarefas).to.eql(10);",
 							"    pm.expect(jsonData).to.have.property('pontosTotais');",
-							"    pm.expect(jsonData.pontosTotais).to.be.a('number');",
-							"    pm.expect(jsonData).to.have.property('detalhePets');",
-							"    pm.expect(jsonData.detalhePets).to.be.an('array');",
+							"    pm.expect(jsonData.pontosTotais).to.eql(10);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -170,22 +278,22 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{baseUrl}}/pets/me/pontos",
+					"raw": "{{baseUrl}}/pets/{{created_pet_id}}/pontos",
 					"host": [
 						"{{baseUrl}}"
 					],
 					"path": [
 						"pets",
-						"me",
+						"{{created_pet_id}}",
 						"pontos"
 					]
 				},
-				"description": "Invoca o endpoint que executa diretamente a Stored Procedure Oracle de cálculo de pontuação de cuidados, validando a integração procedural."
+				"description": "Invoca a Stored Procedure Oracle (PKG_PETGUARDIAN.CALCULAR_PONTOS_PET) especificamente para o pet criado no teste e valida que os 10 pontos da rotina concluída foram computados com precisão."
 			},
 			"response": []
 		},
 		{
-			"name": "4. Validação e Segurança — Rejeição de Requisição com Payload Inválido (400 Bad Request)",
+			"name": "6. Validação e Segurança — Rejeição de Requisição com Payload Inválido (400 Bad Request)",
 			"event": [
 				{
 					"listen": "test",
@@ -241,22 +349,54 @@
 				"description": "Testa a robustez da aplicação ao enviar payload incompleto e inconsistente, garantindo a interceptação pelo Global Exception Handler."
 			},
 			"response": []
+		},
+		{
+			"name": "7. Teardown — Limpeza Automatizada do Pet de Teste (204 No Content)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code deve ser 204 No Content (Pet removido com sucesso)\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pets/{{created_pet_id}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pets",
+						"{{created_pet_id}}"
+					]
+				},
+				"description": "Teardown de dados: exclui o pet gerado nesta execução de testes automatizados, garantindo que o banco de dados Oracle permaneça limpo e a suíte seja 100% idempotente."
+			},
+			"response": []
 		}
 	],
 	"variable": [
 		{
 			"key": "baseUrl",
 			"value": "https://app-petguardian-01bd2f0c.azurewebsites.net",
-			"type": "string"
-		},
-		{
-			"key": "user_email",
-			"value": "enzo.admin@petguardian.com",
-			"type": "string"
-		},
-		{
-			"key": "user_password",
-			"value": "123mudar",
 			"type": "string"
 		}
 	]

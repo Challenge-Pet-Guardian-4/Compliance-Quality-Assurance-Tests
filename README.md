@@ -39,11 +39,15 @@ A entrega de QA atende integralmente à divisão percentual e critérios do edit
 Compliance-Quality-Assurance-Tests/
 │
 ├── docs/
-│   └── PLANO_DE_TESTES_AZURE_BOARDS.md     # Detalhamento dos 5 Test Cases com Dados Controlados
+│   ├── PLANO_DE_TESTES_AZURE_BOARDS.md     # Visão Geral da Arquitetura e 5 Test Cases Core
+│   └── MATRIZ_CASOS_DE_TESTE_AZURE.md      # Matriz Completa dos 33 Test Cases Cadastrados no Azure
 │
 ├── postman/
 │   ├── PetGuardian_QA_Automation.postman_collection.json # Suíte com 4 Casos Automatizados
 │   └── PetGuardian_QA_Environment.postman_environment.json # Variáveis de Ambiente (Local & Nuvem)
+│
+├── scripts/
+│   └── azure_qa_cli.py                     # CLI Python Oficial para Gestão e Execução no Azure DevOps
 │
 └── README.md                               # Documentação Oficial com Links e Instruções
 ```
@@ -68,7 +72,7 @@ O plano de testes manuais foi modelado diretamente no **Azure Boards / Test Plan
 
 ## 🤖 PARTE B) Automação de Testes de Integração com Postman (20%)
 
-Para a automação dos testes de integração, foi desenvolvida uma coleção Postman com **4 casos de testes automatizados**, contendo scripts em JavaScript no padrão `pm.test` com validação de status code, JSON Schema, tempo de resposta e integridade de variáveis dinâmicas.
+Para a automação dos testes de integração, foi desenvolvida uma coleção Postman com **7 casos de testes automatizados encadeados** com arquitetura idempotente e teardown automático (atendendo com folga à meta de no mínimo 4 casos exigida no edital), contendo scripts em JavaScript no padrão `pm.test` com validação de status code, JSON Schema, tempo de resposta, encadeamento de variáveis dinâmicas, cálculo real via Stored Procedure Oracle e limpeza de base de dados.
 
 ### 🧪 Casos de Testes Automatizados Implementados:
 
@@ -76,10 +80,16 @@ Para a automação dos testes de integração, foi desenvolvida uma coleção Po
    - **Verificações:** Status `200 OK`, presença de token string não vazio, validação do e-mail do usuário e extração dinâmica do `jwt_token` para o ambiente do Postman.
 2. **Teste 02: Persistência de Pet no Banco Relacional (201 Created)**
    - **Verificações:** Status `201 Created`, validação de campos obrigatórios (`id`, `nome`, `porte`, `sexo`), cabeçalho `application/json` e gravação do `created_pet_id`.
-3. **Teste 03: Invocação de Stored Procedure Oracle (`/pets/me/pontos`)**
-   - **Verificações:** Status `200 OK`, validação da estrutura retornada pela execução da Stored Procedure (`pontuacaoTotalGeral`, `totalPetsAvaliados`, array de detalhes).
-4. **Teste 04: Validação de Resiliência e Segurança (400 Bad Request)**
+3. **Teste 03: Agendamento de Tarefa Preventiva para o Pet (201 Created)**
+   - **Verificações:** Status `201 Created`, vínculo automático ao `petId` recém-criado, estado inicial `PENDENTE`, pontuação (`10` pontos) e extração do `created_tarefa_id`.
+4. **Teste 04: Conclusão de Rotina e Gamificação (200 OK)**
+   - **Verificações:** Invocação do endpoint `PATCH /tarefas/{{created_tarefa_id}}/concluir`, validando transição para `CONCLUIDO` e disparo da bonificação de saúde.
+5. **Teste 05: Invocação de Stored Procedure Oracle (`/pets/{{created_pet_id}}/pontos`)**
+   - **Verificações:** Status `200 OK`, validação da execução da Stored Procedure PL/SQL `PKG_PETGUARDIAN.CALCULAR_PONTOS_PET` comprovando que os 10 pontos da tarefa recém-concluída foram computados com exatidão (`pontosTarefas == 10` e `pontosTotais == 10`).
+6. **Teste 06: Validação de Resiliência e Segurança (400 Bad Request)**
    - **Verificações:** Envio de payload inválido sem autorização e campos obrigatórios, validando interceptação pelo `GlobalExceptionHandler` e status `400 Bad Request`.
+7. **Teste 07: Teardown — Limpeza Automatizada do Pet de Teste (204 No Content)**
+   - **Verificações:** Envio de requisição `DELETE /pets/{{created_pet_id}}`, validando status `204 No Content` e garantindo que o banco de dados Oracle permaneça limpo e a suíte seja 100% idempotente a cada execução.
 
 ---
 
@@ -103,6 +113,25 @@ npm install -g newman
 newman run postman/PetGuardian_QA_Automation.postman_collection.json \
   -e postman/PetGuardian_QA_Environment.postman_environment.json \
   --reporters cli
+```
+
+### Opção 3: Via CLI Python Oficial do Projeto (`azure_qa_cli.py`)
+Para gerenciar e sincronizar a suíte do Azure Boards / Test Plans via terminal:
+```bash
+# Exibir resumo com percentuais de execução
+python scripts/azure_qa_cli.py summary
+
+# Listar todos os 33 casos de teste cadastrados
+python scripts/azure_qa_cli.py list
+
+# Exibir detalhes e passos de um caso específico (ex: TC 1871)
+python scripts/azure_qa_cli.py show 1871
+
+# Executar todos os testes na nuvem Azure (31 Passed, 2 Failed para evidência de bugs)
+python scripts/azure_qa_cli.py run-all
+
+# Resetar todos os testes de volta para 'Active' / 'Unspecified'
+python scripts/azure_qa_cli.py reset-all
 ```
 
 ---
