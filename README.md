@@ -18,16 +18,26 @@
 
 ## 🔗 Links Oficiais Obrigatórios de Entrega (Sprint 4)
 
-1. **Link de Acesso ao Azure Boards (Testes Manuais):**  
-   👉 [https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps](https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps)  
-   *(O professor possui perfil **Basic** na Organização e acesso **Administrator** no projeto).*
+| Recurso | Descrição | Link Oficial |
+| :--- | :--- | :--- |
+| 📋 **Azure Boards & Test Plans (QA)** | Acesso aos 4 Planos de Testes Manuais com dados controlados | [Azure Boards — Sprint 4](https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps) |
+| 🎥 **Vídeo Demonstrativo de QA** | Gravação da configuração e execução dos testes no Azure e Postman | *[Link do Vídeo da Sprint 4 a ser anexado]* |
+| 🐙 **Repositório Oficial (Branch `develop`)** | Código de QA, matriz de testes e scripts na branch obrigatória | [GitHub — Compliance & QA](https://github.com/Challenge-Pet-Guardian-4/Compliance-Quality-Assurance-Tests/tree/develop) |
 
-2. **Link do Vídeo Demonstrativo dos Testes de Automação (Postman):**  
-   👉 *[Vídeo da Sprint 4 a ser anexado]*  
-   *(Demonstração completa da configuração, execução em lote e resultados de todos os testes).*
+> ⚠️ **Acesso do Professor:** O professor possui perfil **Basic** na Organização `PetGuardian` e perfil **Administrator** no projeto `Sprint 4 – Azure DevOps`.
 
-3. **Repositório GitHub Oficial (Branch Obrigatória: `develop`):**  
-   👉 [https://github.com/Challenge-Pet-Guardian-4/Compliance-Quality-Assurance-Tests/tree/develop](https://github.com/Challenge-Pet-Guardian-4/Compliance-Quality-Assurance-Tests/tree/develop)
+---
+
+## 🌐 Links do Ecossistema Integrado (Java, DevOps & Nuvem Azure)
+
+| Componente | Descrição | Link |
+| :--- | :--- | :--- |
+| 🌐 **API em Produção (Azure Web App)** | Endpoint base do App Service provisionado na nuvem | [https://app-petguardian-01bd2f0c.azurewebsites.net](https://app-petguardian-01bd2f0c.azurewebsites.net) |
+| 🛡️ **Console Web Admin (Produção)** | Interface web administrativa para auditoria | [https://app-petguardian-01bd2f0c.azurewebsites.net/admin](https://app-petguardian-01bd2f0c.azurewebsites.net/admin) |
+| 📖 **Swagger UI Interativo (OpenAPI 3.1)** | Documentação interativa de todos os endpoints REST | [Swagger UI PetGuardian](https://app-petguardian-01bd2f0c.azurewebsites.net/swagger-ui/index.html) |
+| 🩺 **Actuator Health (Observabilidade)** | Healthcheck em tempo real (Oracle + MongoDB + Liveness) | [Healthcheck Actuator](https://app-petguardian-01bd2f0c.azurewebsites.net/actuator/health) |
+| ☕ **Repositório GitHub (Java Advanced)** | Aplicação Spring Boot, Stored Procedures e 123 testes | [GitHub — Java Advanced](https://github.com/Challenge-Pet-Guardian-4/Java-Advanced) |
+| 🚀 **Repositório GitHub (DevOps & Cloud)** | Pipelines de CI/CD, IaC Bash e infraestrutura em nuvem | [GitHub — DevOps Tools](https://github.com/Challenge-Pet-Guardian-4/DevOps-Tools-Cloud-Computing) |
 
 ---
 
@@ -43,7 +53,7 @@ Compliance-Quality-Assurance-Tests/
 │   └── MATRIZ_CASOS_DE_TESTE_AZURE.md      # Matriz Completa dos 33 Test Cases Cadastrados no Azure
 │
 ├── postman/
-│   ├── PetGuardian_QA_Automation.postman_collection.json # Suíte com 4 Casos Automatizados
+│   ├── PetGuardian_QA_Automation.postman_collection.json # Suíte com 7 Casos Automatizados e Teardown
 │   └── PetGuardian_QA_Environment.postman_environment.json # Variáveis de Ambiente (Local & Nuvem)
 │
 ├── scripts/
