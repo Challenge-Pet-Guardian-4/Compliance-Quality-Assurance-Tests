@@ -21,11 +21,12 @@
 | Recurso | Descrição | Link Oficial |
 | :--- | :--- | :--- |
 | 📋 **Azure Boards & Test Plans (QA)** | Acesso aos 4 Planos de Testes Manuais com dados controlados | [Azure Boards — Sprint 4](https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps) |
-| 🎥 **Vídeo Demonstrativo de QA** | Gravação da configuração e execução dos testes no Azure e Postman | [Assistir no YouTube](https://www.youtube.com/watch?v=rt8Ic9Sq9fI) |
 | 🐙 **Repositório Oficial (Branch `develop`)** | Código de QA, matriz de testes e scripts na branch obrigatória | [GitHub — Compliance & QA](https://github.com/Challenge-Pet-Guardian-4/Compliance-Quality-Assurance-Tests/tree/develop) |
 | ☕ **Repositório Java (Branch `develop`)** | Backend Spring Boot, persistência relacional e suíte de testes | [GitHub — Java Advanced (Branch develop)](https://github.com/Challenge-Pet-Guardian-4/Java-Advanced/tree/develop) |
 
-> ⚠️ **Acesso do Professor:** O professor possui perfil **Basic** na Organização `PetGuardian` e perfil **Administrator** no projeto `Sprint 4 – Azure DevOps`.
+## 🔗 Vídeo de Demonstração (Sprint 4)
+
+[Video QA - Challenge Pet Guardian Sprint 4](https://www.youtube.com/watch?v=rt8Ic9Sq9fI)
 
 ---
 
