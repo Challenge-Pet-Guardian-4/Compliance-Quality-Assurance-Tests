@@ -26,7 +26,7 @@
 
 ## 🔗 Vídeo de Demonstração (Sprint 4)
 
-[Video QA - Challenge Pet Guardian Sprint 4](https://www.youtube.com/watch?v=rt8Ic9Sq9fI)
+[Video QA - Challenge Pet Guardian Sprint 4](https://www.youtube.com/watch?v=q1vGAhyaioU)
 
 ---
 
@@ -70,13 +70,26 @@ Compliance-Quality-Assurance-Tests/
 
 O plano de testes manuais foi modelado diretamente no **Azure Boards / Test Plans**, utilizando a técnica de **dados controlados** predefinidos para garantir repetibilidade e confiabilidade.
 
-| ID | Caso de Teste | Objetivo Principal | Dados de Entrada Controlados | Resultado Esperado | Peso |
-| :---: | :--- | :--- | :--- | :--- | :---: |
-| **TC-01** | Autenticação de Cuidador | Validar segurança e emissão do JWT | `email`: `"enzo.admin@petguardian.com"`<br>`senha`: `"123mudar"` | HTTP 200, JWT estruturado, redirecionamento | 20% |
-| **TC-02** | Cadastro de Pet no Care Circle | Validar persistência relacional na tabela `PET` | `nome`: `"Rex QA Automation"`<br>`porte`: `"MEDIO"`, `castrado`: `true`, `raca`: `"Golden Retriever"` | HTTP 201 Created, ID gerado, vínculo `USUARIO_PET` | 20% |
-| **TC-03** | Ciclo de Tarefa e Gamificação | Validar transição `PENDENTE` -> `CONCLUIDO` | `titulo`: `"Vacinação V10"`<br>`pontos`: `50` | HTTP 200, +50 pontos atribuídos, auditoria DML | 20% |
-| **TC-04** | Stored Procedure Oracle | Validar cálculo via `PKG_PETGUARDIAN` | Chamada ao endpoint `/pets/me/pontos` | HTTP 200, agregação de pontos calculada por procedure | 20% |
-| **TC-05** | Consulta NoSQL MongoDB | Validar documentos de trilhas pedagógicas | Categoria `"ADESTRAMENTO_POSITIVO"` | HTTP 200, documento NoSQL com mídia e metadados | - |
+### 📊 Resumo Consolidado de Execução no Azure Test Plans
+
+| Métrica | Quantidade | Observação |
+| :--- | :---: | :--- |
+| **Planos de Teste Criados** | **4** | `Usuários #1869`, `Família #1882`, `Educação #1898`, `IA #1900` |
+| **Suítes de Teste Ativas** | **4** | Mapeadas por domínio funcional |
+| **Total de Casos de Teste** | **33** | 100% cadastrados com passos e resultados esperados |
+| **Casos Aprovados (Passed)** | **31 (93.9%)** | Fluxos positivos e validações funcionais |
+| **Casos de Falha Controlada (Failed)** | **2 (6.1%)** | Cenários negativos propositais (#1872 e #1876) para teste de validação de erros |
+| **Matriz Completa e Detalhada** | [MATRIZ_CASOS_DE_TESTE_AZURE.md](./docs/MATRIZ_CASOS_DE_TESTE_AZURE.md) | Sincronizada diretamente com a API do Azure DevOps |
+
+### 🧪 Casos de Testes Principais Auditados:
+
+| ID | Caso de Teste | Status Azure | Objetivo Principal | Dados de Entrada Controlados | Resultado Esperado | Peso |
+| :---: | :--- | :---: | :--- | :--- | :--- | :---: |
+| **TC-01** | Autenticação de Cuidador | 🟢 Passed | Validar segurança e emissão do JWT | `email`: `"enzo.admin@petguardian.com"`<br>`senha`: `"123mudar"` | HTTP 200, JWT estruturado, redirecionamento | 20% |
+| **TC-02** | Cadastro de Pet no Care Circle | 🟢 Passed | Validar persistência relacional na tabela `PET` | `nome`: `"Rex QA Automation"`<br>`porte`: `"MEDIO"`, `castrado`: `true`, `raca`: `"Golden Retriever"` | HTTP 201 Created, ID gerado, vínculo `USUARIO_PET` | 20% |
+| **TC-03** | Ciclo de Tarefa e Gamificação | 🟢 Passed | Validar transição `PENDENTE` -> `CONCLUIDO` | `titulo`: `"Vacinação V10"`<br>`pontos`: `50` | HTTP 200, +50 pontos atribuídos, auditoria DML | 20% |
+| **TC-04** | Stored Procedure Oracle | 🟢 Passed | Validar cálculo via `PKG_PETGUARDIAN` | Chamada ao endpoint `/pets/me/pontos` | HTTP 200, agregação de pontos calculada por procedure | 20% |
+| **TC-05** | Consulta NoSQL MongoDB | 🟢 Passed | Validar documentos de trilhas pedagógicas | Categoria `"ADESTRAMENTO_POSITIVO"` | HTTP 200, documento NoSQL com mídia e metadados | - |
 
 > 📌 *O passo a passo minucioso de cada caso de teste está documentado em [`docs/PLANO_DE_TESTES_AZURE_BOARDS.md`](./docs/PLANO_DE_TESTES_AZURE_BOARDS.md).*
 
@@ -97,7 +110,7 @@ Para a automação dos testes de integração, foi desenvolvida uma coleção Po
 4. **Teste 04: Conclusão de Rotina e Gamificação (200 OK)**
    - **Verificações:** Invocação do endpoint `PATCH /tarefas/{{created_tarefa_id}}/concluir`, validando transição para `CONCLUIDO` e disparo da bonificação de saúde.
 5. **Teste 05: Invocação de Stored Procedure Oracle (`/pets/{{created_pet_id}}/pontos`)**
-   - **Verificações:** Status `200 OK`, validação da execução da Stored Procedure PL/SQL `PKG_PETGUARDIAN.CALCULAR_PONTOS_PET` comprovando que os 10 pontos da tarefa recém-concluída foram computados com exatidão (`pontosTarefas == 10` e `pontosTotais == 10`).
+   - **Verificações:** Status `200 OK`, validação da execução da Stored Procedure PL/SQL `PKG_PETGUARDIAN.pr_calcular_pontuacao_pet` comprovando que os 10 pontos da tarefa recém-concluída foram computados com exatidão (`pontosTarefas == 10` e `pontosTotais == 10`).
 6. **Teste 06: Validação de Resiliência e Segurança (400 Bad Request)**
    - **Verificações:** Envio de payload inválido sem autorização e campos obrigatórios, validando interceptação pelo `GlobalExceptionHandler` e status `400 Bad Request`.
 7. **Teste 07: Teardown — Limpeza Automatizada do Pet de Teste (204 No Content)**
@@ -114,7 +127,7 @@ Para a automação dos testes de integração, foi desenvolvida uma coleção Po
    - `PetGuardian_QA_Environment.postman_environment.json`
 3. Selecione o ambiente **PetGuardian — Environment (Local & Cloud)**.
 4. Clique com o botão direito na coleção e selecione **Run Collection**.
-5. Clique em **Run PetGuardian — QA Automated Integration Tests**. Todos os 4 testes devem passar com 100% de sucesso.
+5. Clique em **Run PetGuardian — QA Automated Integration Tests**. Todos os 7 testes devem passar com 100% de sucesso.
 
 ### Opção 2: Via Linha de Comando (Newman CLI)
 ```bash
@@ -141,6 +154,9 @@ python scripts/azure_qa_cli.py show 1871
 
 # Executar todos os testes na nuvem Azure (31 Passed, 2 Failed para evidência de bugs)
 python scripts/azure_qa_cli.py run-all
+
+# Exportar a matriz atualizada do Azure para Markdown
+python scripts/azure_qa_cli.py export
 
 # Resetar todos os testes de volta para 'Active' / 'Unspecified'
 python scripts/azure_qa_cli.py reset-all

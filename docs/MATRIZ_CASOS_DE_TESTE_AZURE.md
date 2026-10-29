@@ -10,17 +10,17 @@
 
 | ID Azure | Título do Caso de Teste | Status Atual | Passos Cadastrados |
 | :---: | :--- | :---: | :---: |
-| **#1871** | Criar usuário válido | ⚪ Not Run | 11 passos |
-| **#1872** | Criar usuário inválido | ⚪ Not Run | 11 passos |
-| **#1879** | Realizar logout de conta ativa | ⚪ Not Run | 6 passos |
-| **#1873** | Entrar com conta existente | ⚪ Not Run | 5 passos |
-| **#1874** | Tentativa de login com credenciais inválidas | ⚪ Not Run | 5 passos |
-| **#1875** | Editar própria conta com credenciais válidas | ⚪ Not Run | 12 passos |
-| **#1876** | Editar própria conta com credenciais inválidas | ⚪ Not Run | 12 passos |
-| **#1877** | Mudar tema do aplicativo | ⚪ Not Run | 5 passos |
-| **#1878** | Ativar notificações | ⚪ Not Run | 10 passos |
-| **#1880** | Fazer upgrade para Premium | ⚪ Not Run | 6 passos |
-| **#1881** | Excluir própria conta | ⚪ Not Run | 6 passos |
+| **#1871** | Criar usuário válido | 🟢 Passed | 11 passos |
+| **#1872** | Criar usuário inválido | 🔴 Failed | 11 passos |
+| **#1879** | Realizar logout de conta ativa | 🟢 Passed | 6 passos |
+| **#1873** | Entrar com conta existente | 🟢 Passed | 5 passos |
+| **#1874** | Tentativa de login com credenciais inválidas | 🟢 Passed | 5 passos |
+| **#1875** | Editar própria conta com credenciais válidas | 🟢 Passed | 12 passos |
+| **#1876** | Editar própria conta com credenciais inválidas | 🔴 Failed | 12 passos |
+| **#1877** | Mudar tema do aplicativo | 🟢 Passed | 5 passos |
+| **#1878** | Ativar notificações | 🟢 Passed | 10 passos |
+| **#1880** | Fazer upgrade para Premium | 🟢 Passed | 6 passos |
+| **#1881** | Excluir própria conta | 🟢 Passed | 6 passos |
 
 #### 🔍 Detalhamento das Etapas e Dados Controlados:
 
@@ -186,20 +186,20 @@
 
 | ID Azure | Título do Caso de Teste | Status Atual | Passos Cadastrados |
 | :---: | :--- | :---: | :---: |
-| **#1884** | Adicionar pet | ⚪ Not Run | 11 passos |
-| **#1885** | Convidar familiar | ⚪ Not Run | 7 passos |
-| **#1886** | Editar ficha do pet | ⚪ Not Run | 13 passos |
-| **#1887** | Criar um registro de saúde | ⚪ Not Run | 8 passos |
-| **#1888** | Editar registro de saúde | ⚪ Not Run | 7 passos |
-| **#1889** | Excluir registro de saúde de pet | ⚪ Not Run | 7 passos |
-| **#1890** | Transferir titularidade de pet | ⚪ Not Run | 7 passos |
-| **#1892** | Deixar de cuidar de um pet | ⚪ Not Run | 7 passos |
-| **#1894** | Criar tarefa válida para pet | ⚪ Not Run | 10 passos |
-| **#1895** | Concluir tarefa existente | ⚪ Not Run | 5 passos |
-| **#1896** | Editar tarefa existente | ⚪ Not Run | 10 passos |
-| **#1897** | Excluir tarefa existente | ⚪ Not Run | 6 passos |
-| **#1891** | Excluir Co-cuidador do pet | ⚪ Not Run | 7 passos |
-| **#1893** | Excluir pet | ⚪ Not Run | 6 passos |
+| **#1884** | Adicionar pet | 🟢 Passed | 11 passos |
+| **#1885** | Convidar familiar | 🟢 Passed | 7 passos |
+| **#1886** | Editar ficha do pet | 🟢 Passed | 13 passos |
+| **#1887** | Criar um registro de saúde | 🟢 Passed | 8 passos |
+| **#1888** | Editar registro de saúde | 🟢 Passed | 7 passos |
+| **#1889** | Excluir registro de saúde de pet | 🟢 Passed | 7 passos |
+| **#1890** | Transferir titularidade de pet | 🟢 Passed | 7 passos |
+| **#1892** | Deixar de cuidar de um pet | 🟢 Passed | 7 passos |
+| **#1894** | Criar tarefa válida para pet | 🟢 Passed | 10 passos |
+| **#1895** | Concluir tarefa existente | 🟢 Passed | 5 passos |
+| **#1896** | Editar tarefa existente | 🟢 Passed | 10 passos |
+| **#1897** | Excluir tarefa existente | 🟢 Passed | 6 passos |
+| **#1891** | Excluir Co-cuidador do pet | 🟢 Passed | 7 passos |
+| **#1893** | Excluir pet | 🟢 Passed | 6 passos |
 
 #### 🔍 Detalhamento das Etapas e Dados Controlados:
 
@@ -406,8 +406,8 @@
 
 | ID Azure | Título do Caso de Teste | Status Atual | Passos Cadastrados |
 | :---: | :--- | :---: | :---: |
-| **#1902** | Realizar lição | ⚪ Not Run | 8 passos |
-| **#1903** | Desmarcar lição concluída | ⚪ Not Run | 6 passos |
+| **#1902** | Realizar lição | 🟢 Passed | 8 passos |
+| **#1903** | Desmarcar lição concluída | 🟢 Passed | 6 passos |
 
 #### 🔍 Detalhamento das Etapas e Dados Controlados:
 
@@ -445,12 +445,12 @@
 
 | ID Azure | Título do Caso de Teste | Status Atual | Passos Cadastrados |
 | :---: | :--- | :---: | :---: |
-| **#1904** | Realizar pergunta ao assistente desvinculado de pet | ⚪ Not Run | 4 passos |
-| **#1905** | Realizar pergunta ao assistente vínculado ao pet | ⚪ Not Run | 5 passos |
-| **#1906** | Ver histórico de conversa vinculado a um pet | ⚪ Not Run | 5 passos |
-| **#1908** | Criar novo chat | ⚪ Not Run | 5 passos |
-| **#1907** | Excluir chat anterior | ⚪ Not Run | 6 passos |
-| **#1909** | Realizar pergunta fora do contexto | ⚪ Not Run | 4 passos |
+| **#1904** | Realizar pergunta ao assistente desvinculado de pet | 🟢 Passed | 4 passos |
+| **#1905** | Realizar pergunta ao assistente vínculado ao pet | 🟢 Passed | 5 passos |
+| **#1906** | Ver histórico de conversa vinculado a um pet | 🟢 Passed | 5 passos |
+| **#1908** | Criar novo chat | 🟢 Passed | 5 passos |
+| **#1907** | Excluir chat anterior | 🟢 Passed | 6 passos |
+| **#1909** | Realizar pergunta fora do contexto | 🟢 Passed | 4 passos |
 
 #### 🔍 Detalhamento das Etapas e Dados Controlados:
 
