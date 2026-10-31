@@ -91,7 +91,7 @@
   6. Acionar a ação de submissão do formulário.
 * **Dados de Saída Esperados:**
   - Código HTTP: `201 Created`.
-  - Resposta contendo o identificador gerado dinamicamente (`id > 0`), idade calculada dinamicamente, status de castração e associação automática do usuário autenticado como `respon_princ = 'S'` na tabela `USUARIO_PET`.
+  - Resposta contendo o identificador gerado dinamicamente (`id > 0`), idade calculada dinamicamente, status de castração e associação automática do usuário autenticado como `respon_princ = 1` na tabela `USUARIO_PET`.
   - Mensagem de sucesso na UI e exibição do card do pet na lista de animais da família.
 
 ---
@@ -103,18 +103,18 @@
 * **Dados de Entrada Controlados:**
   - `titulo`: `"Vacinação Polivalente V10"`
   - `dataPrazo`: `"2026-11-20T10:00:00"`
-  - `pontos`: `50`
+  - `pontos`: `10`
   - `status`: `"CONCLUIDO"`
 * **Procedimento de Teste (Passo a Passo):**
   1. Acessar a aba "Tarefas e Cuidados" do pet selecionado.
-  2. Criar a tarefa com título `"Vacinação Polivalente V10"` e valor de `50` pontos.
+  2. Criar a tarefa com título `"Vacinação Polivalente V10"` e valor de `10` pontos.
   3. Confirmar que a tarefa é exibida inicialmente no estado `PENDENTE`.
   4. Marcar a caixa de seleção de conclusão da tarefa informando a data/hora real do cumprimento.
   5. Submeter a confirmação de conclusão.
 * **Dados de Saída Esperados:**
   - Código HTTP: `200 OK`.
   - Estado da tarefa atualizado para `CONCLUIDO`.
-  - Acréscimo imediato de 50 pontos no saldo do pet, refletido na tabela `HISTORICO_PONTOS` e auditado no log DML do banco Oracle.
+  - Acréscimo imediato de 10 pontos no saldo do pet, computado via Stored Procedure (`PKG_PETGUARDIAN.pr_calcular_pontuacao_pet`) e auditado no log DML (`AUDITORIA_DML_TAREFA`) do banco Oracle.
 
 ---
 
@@ -131,7 +131,7 @@
   3. Verificar a agregação dos pontos computados de rotina preventiva e conteúdo educativo via função nativa `JSON_ARRAYAGG`.
 * **Dados de Saída Esperados:**
   - Código HTTP: `200 OK`.
-  - Payload com `pontuacaoTotalGeral`, total de pets avaliados e distribuição analítica detalhada por animal.
+  - Payload com `pontosTotais`, total de pets avaliados e distribuição analítica detalhada por animal.
   - O valor retornado na API deve ser idêntico ao resultado processado pela procedure no Oracle.
 
 ---
