@@ -2,7 +2,7 @@
 ## 🐾 Projeto: PetGuardian (Challenge 2026 — Clyvo Vet)
 > **Disciplina:** Compliance, Quality Assurance & Tests — 4ª Sprint  
 > **Plataforma de Gestão:** [Azure Boards](https://dev.azure.com/PetGuardian/Sprint%204%20%E2%80%93%20Azure%20DevOps)  
-> **Vídeo Oficial de Demonstração (YouTube):** [Assistir no YouTube](https://www.youtube.com/watch?v=q1vGAhyaioU) ✅ **Gravado**
+> **Vídeo Oficial de Demonstração (YouTube):** [Assistir no YouTube](https://www.youtube.com/watch?v=rt8Ic9Sq9fI) ✅ **Gravado**
 
 ---
 
@@ -26,7 +26,7 @@
 ---
 
 ## 🎥 Vídeo Demonstrativo Obrigatório (Sprint 4)
-* **Link no YouTube:** [Assistir no YouTube](https://www.youtube.com/watch?v=q1vGAhyaioU) ✅ **Gravado**
+* **Link no YouTube:** [Assistir no YouTube](https://www.youtube.com/watch?v=rt8Ic9Sq9fI) ✅ **Gravado**
 * **Conteúdo Comprovado em Vídeo:**
   1. Acesso do professor como **Basic** e **Administrator** nas configurações do Azure DevOps.
   2. Apresentação da suíte completa de **4 Planos de Testes e 4 Suítes** no Azure Test Plans.

@@ -26,7 +26,7 @@
 
 ## 🔗 Vídeo de Demonstração (Sprint 4)
 
-[Video QA - Challenge Pet Guardian Sprint 4](https://www.youtube.com/watch?v=q1vGAhyaioU)
+[Video Compliance - Challenge Pet Guardian Sprint 4](https://www.youtube.com/watch?v=rt8Ic9Sq9fI)
 
 ---
 
